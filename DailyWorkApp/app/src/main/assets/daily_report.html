@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>일일 업무 현황</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        th, td { border: 1px solid #aaa; padding: 8px; text-align: center; }
+        th { background-color: #f0f0f0; }
+        textarea {
+          width: 100%;
+          border: none;
+          resize: none;
+          min-height: 40px;
+          font-family: sans-serif;
+          text-align: center;
+        }
+        input[type="date"] {
+          padding: 4px;
+        }
+        #remarks {
+          width: 100%;
+          height: 100px;
+          margin-top: 10px;
+          resize: none;
+        }
+        button {
+          padding: 6px 12px;
+          cursor: pointer;
+        }
+        .section-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+        #saveBtnWrapper {
+          text-align: center;
+          margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+
+<h2 style="text-align: center;">일일 업무 현황</h2>
+<p style="text-align: right;">작성일: <input type="date" id="writeDate"></p>
+
+<!-- 견적 -->
+<div class="section-header">
+    <h3>견&nbsp;&nbsp;적</h3>
+</div>
+<table id="estimateTable">
+    <thead>
+    <tr>
+        <th>업체명</th><th>공사명</th><th>견적금액</th><th>작성자</th><th>추가/삭제</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td><textarea></textarea></td>
+        <td><textarea></textarea></td>
+        <td><textarea></textarea></td>
+        <td><textarea></textarea></td>
+        <td>
+            <button onclick="addRow('estimateTable')">➕</button>
+            <button onclick="deleteRow(this, 'estimateTable')">🗑️</button>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<!-- 계약 -->
+<div class="section-header">
+    <h3>계&nbsp;&nbsp;약</h3>
+</div>
+<table id="contractTable">
+    <thead>
+    <tr>
+        <th>업체명</th><th>공사명</th><th>계약금액</th><th>작성자</th><th>추가/삭제</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td><textarea></textarea></td>
+        <td><textarea></textarea></td>
+        <td><textarea></textarea></td>
+        <td><textarea></textarea></td>
+        <td>
+            <button onclick="addRow('contractTable')">➕</button>
+            <button onclick="deleteRow(this, 'contractTable')">🗑️</button>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<!-- 예정 -->
+<div class="section-header">
+    <h3>예&nbsp;&nbsp;정</h3>
+</div>
+<table id="scheduledTable">
+    <thead>
+    <tr>
+        <th>공사명</th><th>예상착공일</th><th>안전서류</th><th>개시신고</th><th>추가/삭제</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td><textarea></textarea></td>
+        <td><textarea></textarea></td>
+        <td><textarea></textarea></td>
+        <td><textarea></textarea></td>
+        <td>
+            <button onclick="addRow('scheduledTable')">➕</button>
+            <button onclick="deleteRow(this, 'scheduledTable')">🗑️</button>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<!-- 공사 -->
+<div class="section-header">
+    <h3>공&nbsp;&nbsp;사</h3>
+</div>
+<table id="workTable">
+    <thead>
+    <tr>
+        <th>업체명</th><th>공사명</th><th>공사금액</th><th>작성자</th><th>추가/삭제</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td><textarea></textarea></td>
+        <td><textarea></textarea></td>
+        <td><textarea></textarea></td>
+        <td><textarea></textarea></td>
+        <td>
+            <button onclick="addRow('workTable')">➕</button>
+            <button onclick="deleteRow(this, 'workTable')">🗑️</button>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<!-- 특이사항 -->
+<h3>특이사항</h3>
+<textarea id="remarks" placeholder="특이사항을 입력하세요."></textarea>
+
+<!-- 저장 버튼 -->
+<div id="saveBtnWrapper">
+    <button id="saveBtn">저장하기</button>
+</div>
+
+<script>
+    // 오늘 날짜 자동 입력
+    window.onload = function () {
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('writeDate').value = today;
+    };
+
+    // 행 추가 함수
+    function addRow(tableId) {
+      const table = document.getElementById(tableId);
+      const tbody = table.querySelector('tbody');
+      const headerLength = table.querySelector('thead tr').children.length;
+
+      const newRow = document.createElement('tr');
+
+      for (let i = 0; i < headerLength - 1; i++) {
+        const td = document.createElement('td');
+        const ta = document.createElement('textarea');
+        td.appendChild(ta);
+        newRow.appendChild(td);
+      }
+
+      const tdBtn = document.createElement('td');
+      const addBtn = document.createElement('button');
+      addBtn.textContent = "➕";
+      addBtn.onclick = () => addRow(tableId);
+      tdBtn.appendChild(addBtn);
+
+      const delBtn = document.createElement('button');
+      delBtn.textContent = "🗑️";
+      delBtn.style.marginLeft = '5px';
+      delBtn.onclick = () => deleteRow(delBtn, tableId);
+      tdBtn.appendChild(delBtn);
+
+      newRow.appendChild(tdBtn);
+      tbody.appendChild(newRow);
+    }
+
+    // 행 삭제 함수 (1개는 항상 남기기)
+    function deleteRow(button, tableId) {
+      const tbody = document.getElementById(tableId).querySelector('tbody');
+      if (tbody.rows.length > 1) {
+        button.closest('tr').remove();
+      } else {
+        alert("최소 1개의 행은 남겨야 합니다.");
+      }
+    }
+
+    // 저장 버튼 클릭 시 동작
+    document.getElementById('saveBtn').addEventListener('click', function () {
+      const data = {
+        작성일: document.getElementById('writeDate').value,
+        견적: getTableData('estimateTable'),
+        계약: getTableData('contractTable'),
+        예정: getTableData('scheduledTable'),
+        공사: getTableData('workTable'),
+        특이사항: document.getElementById('remarks').value.trim()
+      };
+
+      const jsonStr = JSON.stringify(data, null, 2);
+      const blob = new Blob([jsonStr], { type: "application/json" });
+
+      const dateStr = data.작성일.replace(/-/g, '');
+      const fileName = `일일업무현황_${dateStr}.json`;
+
+      if (window.navigator.msSaveOrOpenBlob) {
+        // IE10+
+        window.navigator.msSaveOrOpenBlob(blob, fileName);
+      } else {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = fileName;
+        a.click();
+        URL.revokeObjectURL(a.href);
+      }
+    });
+
+    // 표 데이터 추출 함수
+    function getTableData(tableId) {
+      const table = document.getElementById(tableId);
+      const tbody = table.querySelector('tbody');
+      const rows = tbody.rows;
+      const headerCells = table.querySelectorAll('thead th');
+      const headers = [];
+
+      for (let i = 0; i < headerCells.length - 1; i++) { // 마지막 열(버튼)은 제외
+        headers.push(headerCells[i].textContent.trim());
+      }
+
+      const data = [];
+      for (let row of rows) {
+        const rowData = {};
+        for (let i = 0; i < headers.length; i++) {
+          const cell = row.cells[i];
+          const ta = cell.querySelector('textarea');
+          rowData[headers[i]] = ta ? ta.value.trim() : "";
+        }
+        data.push(rowData);
+      }
+      return data;
+    }
+</script>
+
+</body>
+</html>
+
+
+

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "810982784149",
+    "project_id": "dailyworkapp-dd885",
+    "storage_bucket": "dailyworkapp-dd885.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:810982784149:android:00f74ef544fe47dce7ef9c",
+        "android_client_info": {
+          "package_name": "com.example.dailyworkapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHBAFoVKLnG6-q7UW9h2OYsqHMznCVtHA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
